@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const EducationDashboard(),
+    );
+  }
+}
+
+class EducationDashboard extends StatelessWidget {
+  const EducationDashboard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Education Dashboard'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Welcome, Student!', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+            _buildCourseOverview(),
+            const SizedBox(height: 20),
+            _buildClassSchedule(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCourseOverview() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _buildStatCard('Current GPA', '3.8', Colors.green),
+        _buildStatCard('Total Credits', '120', Colors.blue),
+      ],
+    );
+  }
+
+  Widget _buildClassSchedule() {
+    return Expanded(
+      child: ListView(
+        children: [
+          _buildClassItem('Math 101', '8:00 AM - 9:30 AM', Colors.orange),
+          _buildClassItem('Physics 202', '10:00 AM - 11:30 AM', Colors.purple),
+          _buildClassItem('English 303', '1:00 PM - 2:30 PM', Colors.red),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard(String title, String value, Color color) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(title, style: TextStyle(fontSize: 16, color: color.withOpacity(0.6))),
+            const SizedBox(height: 10),
+            Text(value, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: color)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildClassItem(String className, String time, Color color) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      elevation: 2,
+      child: ListTile(
+        leading: CircleAvatar(backgroundColor: color, child: const Icon(Icons.school, color: Colors.white)),
+        title: Text(className),
+        subtitle: Text(time),
+      ),
+    );
+  }
+}

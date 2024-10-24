@@ -1,0 +1,166 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const ProfileScreen(),
+    );
+  }
+}
+
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String _profileImageUrl = 'https://via.placeholder.com/150';
+
+  void _changeProfileImage() {
+    // เปลี่ยน URL ของภาพเมื่อกดปุ่มแก้ไข
+    setState(() {
+      _profileImageUrl = 'https://via.placeholder.com/200';
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile'),
+        backgroundColor: Colors.indigo,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Center(
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 60,
+                      backgroundImage: NetworkImage(_profileImageUrl),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: _changeProfileImage, // ฟังก์ชันเปลี่ยนภาพ
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          padding: const EdgeInsets.all(8),
+                          child: const Icon(Icons.edit, color: Colors.blue),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'John Doe',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'johndoe@example.com',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 30),
+              
+              // ปุ่มสำหรับแก้ไขข้อมูลส่วนตัว
+              ElevatedButton.icon(
+                onPressed: () {
+                  // ฟังก์ชันสำหรับแก้ไขข้อมูลส่วนตัว
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Edit Profile clicked!')),
+                  );
+                },
+                icon: const Icon(Icons.edit),
+                label: const Text('Edit Profile'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 80),
+                ),
+              ),
+              const SizedBox(height: 20),
+              
+              // ปุ่มสำหรับเปลี่ยนรหัสผ่าน
+              ElevatedButton.icon(
+                onPressed: () {
+                  // ฟังก์ชันสำหรับเปลี่ยนรหัสผ่าน
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Change Password clicked!')),
+                  );
+                },
+                icon: const Icon(Icons.lock),
+                label: const Text('Change Password'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orangeAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 80),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // ปุ่มสำหรับออกจากระบบ
+              ElevatedButton.icon(
+                onPressed: () {
+                  // ฟังก์ชันสำหรับออกจากระบบ
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Logged Out!')),
+                  );
+                },
+                icon: const Icon(Icons.logout),
+                label: const Text('Log Out'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 80),
+                ),
+              ),
+              const SizedBox(height: 20),
+              
+              // ข้อมูลเกี่ยวกับผู้ใช้งานเพิ่มเติม
+              const Divider(thickness: 2),
+              const SizedBox(height: 10),
+              const Text(
+                'User Information',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              const ListTile(
+                leading: Icon(Icons.phone, color: Colors.green),
+                title: Text('Phone Number'),
+                subtitle: Text('+1234567890'),
+              ),
+              const ListTile(
+                leading: Icon(Icons.location_city, color: Colors.green),
+                title: Text('Address'),
+                subtitle: Text('123 Main Street, City, Country'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

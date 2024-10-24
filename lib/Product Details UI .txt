@@ -1,0 +1,138 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const ProductDetailsScreen(),
+    );
+  }
+}
+
+class ProductDetailsScreen extends StatefulWidget {
+  const ProductDetailsScreen({super.key});
+
+  @override
+  _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
+}
+
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  String? selectedSize; // ตัวแปรสำหรับเก็บขนาดที่เลือก
+  final List<Map<String, dynamic>> cart = []; // ตัวแปรเก็บสินค้าที่เพิ่มไปในตะกร้า
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Product Details'),
+        backgroundColor: Colors.blue,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Image.network(
+                  'https://via.placeholder.com/400',
+                  height: 300,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Nike Air Zoom Pegasus',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                '\$120',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Available Sizes',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  for (var size in ['40', '41', '42', '43', '44'])
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: ChoiceChip(
+                        label: Text(size),
+                        selected: selectedSize == size,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            selectedSize = selected ? size : null;
+                          });
+                        },
+                        selectedColor: Colors.blueAccent,
+                        backgroundColor: Colors.grey[300],
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: selectedSize != null
+                    ? () {
+                        setState(() {
+                          // เพิ่มสินค้าพร้อมขนาดที่เลือกไปยังตะกร้า
+                          cart.add({
+                            'product': 'Nike Air Zoom Pegasus',
+                            'price': 120,
+                            'size': selectedSize,
+                          });
+                        });
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Added size $selectedSize to cart!')),
+                        );
+                      }
+                    : null, // ปิดการทำงานถ้าไม่ได้เลือกขนาด
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 80.0),
+                ),
+                child: const Text(
+                  'Add to Cart',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              const SizedBox(height: 20),
+              // แสดงสินค้าที่อยู่ในตะกร้า
+              const Text(
+                'Items in Cart:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              ...cart.map((item) => ListTile(
+                    title: Text(item['product']),
+                    subtitle: Text('Size: ${item['size']}'),
+                    trailing: Text('\$${item['price']}'),
+                  )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

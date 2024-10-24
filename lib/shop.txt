@@ -32,15 +32,31 @@ class HomePage extends StatelessWidget {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Shoes'),
-          bottom: const TabBar(
-            isScrollable: true,
-            tabs: [
-              Tab(text: 'All'),
-              Tab(text: 'Sneakers'),
-              Tab(text: 'Football'),
-              Tab(text: 'Running'),
-            ],
+          backgroundColor: Colors.lightBlue, // สีพื้นหลังของ title
+          title: const Text(
+            'Shoes',
+            style: TextStyle(
+              color: Colors.white, // สีตัวหนังสือของ title
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(50), // กำหนดความสูงของ TabBar
+            child: Container(
+              color: Colors.deepPurple, // สีพื้นหลังของ TabBar
+              child: const TabBar(
+                isScrollable: true,
+                indicatorColor: Colors.white,
+                labelColor: Colors.white,
+                tabs: [
+                  Tab(text: 'All'),
+                  Tab(text: 'Sneakers'),
+                  Tab(text: 'Football'),
+                  Tab(text: 'Running'),
+                ],
+              ),
+            ),
           ),
           actions: [
             IconButton(
@@ -84,14 +100,24 @@ class HomePage extends StatelessWidget {
                 leading: const Icon(Icons.settings),
                 title: const Text('Settings'),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsPage(),
+                    ),
+                  );
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.shopping_bag),
                 title: const Text('Products'),
                 onTap: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProductsPage(),
+                    ),
+                  );
                 },
               ),
             ],
@@ -441,6 +467,40 @@ class RunningPage extends StatelessWidget {
             Colors.green,
           ),
         ],
+      ),
+    );
+  }
+}
+
+// Settings Page
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
+      body: Center(
+        child: Text('Settings Page'),
+      ),
+    );
+  }
+}
+
+// Products Page
+class ProductsPage extends StatelessWidget {
+  const ProductsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Products'),
+      ),
+      body: Center(
+        child: Text('Products Page'),
       ),
     );
   }

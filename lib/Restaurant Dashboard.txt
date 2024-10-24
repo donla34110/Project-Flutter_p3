@@ -1,0 +1,78 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const RestaurantDashboard(),
+    );
+  }
+}
+
+class RestaurantDashboard extends StatelessWidget {
+  const RestaurantDashboard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Restaurant Dashboard'),
+        backgroundColor: Colors.redAccent,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Today\'s Orders', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+            _buildOrderList(),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.add),
+              label: const Text('Add New Order'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOrderList() {
+    return Expanded(
+      child: ListView(
+        children: [
+          _buildOrderCard('Order #12345', 'Pizza', 'Delivered'),
+          _buildOrderCard('Order #12346', 'Burger', 'Pending'),
+          _buildOrderCard('Order #12347', 'Pasta', 'Delivered'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOrderCard(String orderId, String itemName, String status) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      elevation: 2,
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: status == 'Delivered' ? Colors.green : Colors.orange,
+          child: const Icon(Icons.fastfood, color: Colors.white),
+        ),
+        title: Text(orderId),
+        subtitle: Text('Item: $itemName'),
+        trailing: Text(status),
+      ),
+    );
+  }
+}

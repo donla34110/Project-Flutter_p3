@@ -1,0 +1,176 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const ProductListScreen(),
+    );
+  }
+}
+
+class ProductListScreen extends StatefulWidget {
+  const ProductListScreen({super.key});
+
+  @override
+  _ProductListScreenState createState() => _ProductListScreenState();
+}
+
+class _ProductListScreenState extends State<ProductListScreen> {
+  final List<Map<String, dynamic>> products = [
+    {'name': 'Shoes 1', 'price': '\$50', 'image': 'https://via.placeholder.com/150'},
+    {'name': 'Shoes 2', 'price': '\$60', 'image': 'https://via.placeholder.com/150'},
+    {'name': 'Shoes 3', 'price': '\$70', 'image': 'https://via.placeholder.com/150'},
+  ];
+
+  List<Map<String, dynamic>> cart = [];
+  String query = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Product List'),
+        backgroundColor: Colors.teal,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CartScreen(
+                          cart: cart,
+                          onRemove: (index) {
+                            setState(() {
+                              cart.removeAt(index);
+                            });
+                          },
+                        )),
+              );
+            },
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Search Products',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  query = value;
+                });
+              },
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView(
+                children: products
+                    .where((product) =>
+                        product['name'].toLowerCase().contains(query.toLowerCase()))
+                    .map((product) {
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    elevation: 4,
+                    child: ListTile(
+                      leading: Image.network(product['image'], width: 60, height: 60),
+                      title: Text(product['name']),
+                      subtitle: Text(product['price']),
+                      trailing: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            cart.add(product);
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('${product['name']} added to cart!')),
+                          );
+                        },
+                        child: const Text('Add'),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// Cart Screen
+class CartScreen extends StatefulWidget {
+  final List<Map<String, dynamic>> cart;
+  final Function(int) onRemove;
+
+  const CartScreen({super.key, required this.cart, required this.onRemove});
+
+  @override
+  _CartScreenState createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Shopping Cart'),
+        backgroundColor: Colors.teal,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: widget.cart.isEmpty
+            ? const Center(
+                child: Text(
+                  'Your cart is empty!',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              )
+            : ListView.builder(
+                itemCount: widget.cart.length,
+                itemBuilder: (context, index) {
+                  final item = widget.cart[index];
+                  return Card(
+                    child: ListTile(
+                      leading: Image.network(item['image'], width: 60, height: 60),
+                      title: Text(item['name']),
+                      subtitle: Text(item['price']),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          setState(() {
+                            widget.onRemove(index);
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('${item['name']} removed from cart!'),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
+      ),
+    );
+  }
+}

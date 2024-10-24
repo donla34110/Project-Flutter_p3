@@ -1,0 +1,110 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const WishlistScreen(),
+    );
+  }
+}
+
+class WishlistScreen extends StatefulWidget {
+  const WishlistScreen({super.key});
+
+  @override
+  _WishlistScreenState createState() => _WishlistScreenState();
+}
+
+class _WishlistScreenState extends State<WishlistScreen> {
+  // ตัวแปรสถานะว่ารายการถูก "ชอบ" หรือไม่
+  final List<bool> isFavorite = [true, true];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Wishlist'),
+        backgroundColor: Colors.redAccent,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            _buildWishlistItem(
+              imageUrl: 'https://via.placeholder.com/60',
+              title: 'Nike Air Zoom Pegasus',
+              index: 0,
+            ),
+            const Divider(),
+            _buildWishlistItem(
+              imageUrl: 'https://via.placeholder.com/60',
+              title: 'Adidas Sneakers',
+              index: 1,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ฟังก์ชันสร้างรายการสินค้าใน Wishlist
+  Widget _buildWishlistItem({
+    required String imageUrl,
+    required String title,
+    required int index,
+  }) {
+    return ListTile(
+      leading: Image.network(imageUrl),
+      title: Text(title),
+      trailing: IconButton(
+        icon: Icon(
+          isFavorite[index] ? Icons.favorite : Icons.favorite_border,
+          color: isFavorite[index] ? Colors.red : Colors.grey,
+        ),
+        onPressed: () {
+          setState(() {
+            isFavorite[index] = !isFavorite[index]; // เปลี่ยนสถานะ "ชอบ" หรือไม่ชอบ
+          });
+        },
+      ),
+      onTap: () {
+        // เมื่อคลิกที่รายการสามารถนำไปสู่หน้ารายละเอียดสินค้า
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailsScreen(title: title),
+          ),
+        );
+      },
+    );
+  }
+}
+
+// หน้ารายละเอียดสินค้า
+class ProductDetailsScreen extends StatelessWidget {
+  final String title;
+
+  const ProductDetailsScreen({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: Colors.redAccent,
+      ),
+      body: Center(
+        child: Text(
+          'Details for $title',
+          style: const TextStyle(fontSize: 24),
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,126 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const SettingsScreen(),
+    );
+  }
+}
+
+class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  _SettingsScreenState createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool _isDarkMode = false;
+  bool _isNotificationsEnabled = true;
+  bool _isAutoUpdateEnabled = true;
+  String _selectedLanguage = 'English';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+        backgroundColor: Colors.purple,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16.0),
+        children: [
+          const ListTile(
+            title: Text('Account Settings'),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: null, // Add your navigation function here.
+          ),
+          const Divider(),
+
+          // Dark Mode Switch
+          SwitchListTile(
+            title: const Text('Dark Mode'),
+            value: _isDarkMode,
+            onChanged: (bool value) {
+              setState(() {
+                _isDarkMode = value;
+              });
+            },
+            secondary: const Icon(Icons.brightness_6),
+          ),
+          const Divider(),
+
+          // Notification Settings
+          SwitchListTile(
+            title: const Text('Notifications'),
+            value: _isNotificationsEnabled,
+            onChanged: (bool value) {
+              setState(() {
+                _isNotificationsEnabled = value;
+              });
+            },
+            secondary: const Icon(Icons.notifications),
+          ),
+          const Divider(),
+
+          // Auto-update settings
+          SwitchListTile(
+            title: const Text('Auto-update'),
+            value: _isAutoUpdateEnabled,
+            onChanged: (bool value) {
+              setState(() {
+                _isAutoUpdateEnabled = value;
+              });
+            },
+            secondary: const Icon(Icons.update),
+          ),
+          const Divider(),
+
+          // Language Selection
+          ListTile(
+            title: const Text('Language'),
+            trailing: DropdownButton<String>(
+              value: _selectedLanguage,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedLanguage = newValue!;
+                });
+              },
+              items: <String>['English', 'Thai', 'Spanish', 'French']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
+            leading: const Icon(Icons.language),
+          ),
+          const Divider(),
+
+          const ListTile(
+            title: Text('Privacy & Security'),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: null, // Add your navigation function here.
+          ),
+          const Divider(),
+
+          const ListTile(
+            title: Text('Help & Support'),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: null, // Add your navigation function here.
+          ),
+        ],
+      ),
+    );
+  }
+}

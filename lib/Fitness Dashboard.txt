@@ -1,0 +1,109 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const FitnessDashboard(),
+    );
+  }
+}
+
+class FitnessDashboard extends StatelessWidget {
+  const FitnessDashboard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Fitness Dashboard'),
+        backgroundColor: Colors.deepPurple,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            _buildGreeting(),
+            const SizedBox(height: 30),
+            _buildWorkoutStats(),
+            const SizedBox(height: 20),
+            _buildRecentWorkouts(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGreeting() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Text('Good Morning, Sarah!',
+            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+        SizedBox(height: 8),
+        Text('Let’s get moving and stay fit today!',
+            style: TextStyle(fontSize: 18, color: Colors.grey)),
+      ],
+    );
+  }
+
+  Widget _buildWorkoutStats() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _buildStatCard('Steps', '10,000', Icons.directions_walk, Colors.green),
+        _buildStatCard('Calories', '500 kcal', Icons.local_fire_department, Colors.orange),
+        _buildStatCard('Water Intake', '2.5L', Icons.local_drink, Colors.blue),
+      ],
+    );
+  }
+
+  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Icon(icon, color: color, size: 30),
+            const SizedBox(height: 8),
+            Text(title, style: const TextStyle(fontSize: 16, color: Colors.grey)),
+            const SizedBox(height: 5),
+            Text(value, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRecentWorkouts() {
+    return Expanded(
+      child: ListView(
+        children: [
+          _buildWorkoutTile('Morning Run', '30 mins', '350 kcal'),
+          _buildWorkoutTile('Yoga Session', '45 mins', '200 kcal'),
+          _buildWorkoutTile('Strength Training', '1 hr', '500 kcal'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWorkoutTile(String workout, String time, String calories) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      elevation: 3,
+      child: ListTile(
+        leading: const Icon(Icons.fitness_center, color: Colors.deepPurple),
+        title: Text(workout),
+        subtitle: Text('$time | Burned: $calories'),
+        trailing: const Icon(Icons.chevron_right),
+      ),
+    );
+  }
+}

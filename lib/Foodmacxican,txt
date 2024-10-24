@@ -1,0 +1,190 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF10162F),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF10162F),
+        elevation: 0,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '21 Pentrefelin, LL68 9PE',
+              style: TextStyle(fontSize: 16),
+            ),
+            Icon(Icons.notifications),
+          ],
+        ),
+        leading: const Icon(Icons.location_on),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: Icon(Icons.shopping_cart),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Search bar
+              TextField(
+                decoration: InputDecoration(
+                  hintText: 'Find food & drink',
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Banner Image
+              Container(
+                height: 180,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: const DecorationImage(
+                    image: NetworkImage('https://via.placeholder.com/400'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Mexican Food',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Category tabs
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[850],
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    _CategoryTab(text: 'Popular', selected: true),
+                    _CategoryTab(text: 'Hot Today'),
+                    _CategoryTab(text: 'Near by'),
+                    _CategoryTab(text: 'Favorite'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Food Categories
+              GridView.count(
+                crossAxisCount: 4,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                children: const [
+                  _FoodCategory(icon: Icons.local_cafe, label: 'Tea'),
+                  _FoodCategory(icon: Icons.coffee, label: 'Coffee'),
+                  _FoodCategory(icon: Icons.fastfood, label: 'Chicken'),
+                  _FoodCategory(icon: Icons.ramen_dining, label: 'Ramen'),
+                  _FoodCategory(icon: Icons.fastfood, label: 'Hot Dog'),
+                  _FoodCategory(icon: Icons.icecream, label: 'Ice Cream'),
+                  _FoodCategory(icon: Icons.fastfood, label: 'Potato'),
+                  _FoodCategory(icon: Icons.icecream, label: 'Ice Cream'),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xFF10162F),
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add_circle, size: 35),
+            label: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CategoryTab extends StatelessWidget {
+  final String text;
+  final bool selected;
+
+  const _CategoryTab({required this.text, this.selected = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+        color: selected ? Colors.blue : Colors.grey,
+      ),
+    );
+  }
+}
+
+class _FoodCategory extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _FoodCategory({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircleAvatar(
+          backgroundColor: Colors.blueAccent,
+          child: Icon(icon, color: Colors.white),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ],
+    );
+  }
+}

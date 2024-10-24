@@ -1,0 +1,367 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        backgroundColor: Colors.orangeAccent,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CartScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Trending Section
+              const Text(
+                'Trending this week',
+                style: TextStyle(
+                    fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+              ),
+              const SizedBox(height: 10),
+              _buildTrendingSection(context),
+
+              const SizedBox(height: 20),
+
+              // Food Categories Section
+              const Text(
+                'Food Categories',
+                style: TextStyle(
+                    fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+              ),
+              const SizedBox(height: 10),
+              _buildCategorySection(context),
+
+              const SizedBox(height: 20),
+
+              // Most Popular Section
+              const Text(
+                'Most Popular',
+                style: TextStyle(
+                    fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+              ),
+              const SizedBox(height: 10),
+              _buildMostPopularSection(context),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
+    );
+  }
+
+  Widget _buildTrendingSection(BuildContext context) {
+    return SizedBox(
+      height: 120,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          _buildTrendingCard(context, 'American fries', 'https://via.placeholder.com/150', '\$11.00'),
+          _buildTrendingCard(context, 'Calas', 'https://via.placeholder.com/150', '\$15.00'),
+          _buildTrendingCard(context, 'Pizza Margherita', 'https://via.placeholder.com/150', '\$8.00'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTrendingCard(BuildContext context, String title, String imageUrl, String price) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(title: title, imageUrl: imageUrl, price: price),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(right: 10),
+        width: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              bottom: 0,
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                width: 100,
+                decoration: const BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(12),
+                    bottomRight: Radius.circular(12),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      price,
+                      style: const TextStyle(
+                          color: Colors.orangeAccent,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategorySection(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _buildCategoryCard(context, 'Grains', Icons.rice_bowl),
+        _buildCategoryCard(context, 'Sandwiches', Icons.fastfood),
+        _buildCategoryCard(context, 'Vegetables', Icons.eco),
+      ],
+    );
+  }
+
+  Widget _buildCategoryCard(BuildContext context, String label, IconData icon) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CategoryScreen(category: label)),
+        );
+      },
+      child: Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.orangeAccent.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 40, color: Colors.orangeAccent),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              style: const TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black54),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMostPopularSection(BuildContext context) {
+    return SizedBox(
+      height: 180,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          _buildPopularCard(context, 'Home Cooking Expo', 'https://via.placeholder.com/150'),
+          _buildPopularCard(context, 'The Lonesome Dove', 'https://via.placeholder.com/150'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPopularCard(BuildContext context, String title, String imageUrl) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(title: title, imageUrl: imageUrl, price: '\$25.00'),
+          ),
+        );
+      },
+      child: Container(
+        width: 150,
+        margin: const EdgeInsets.only(right: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          image: DecorationImage(
+            image: NetworkImage(imageUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            padding: const EdgeInsets.all(6),
+            width: 150,
+            decoration: const BoxDecoration(
+              color: Colors.black54,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(12),
+                bottomRight: Radius.circular(12),
+              ),
+            ),
+            child: Text(
+              title,
+              style: const TextStyle(
+                  color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomNavigationBar(BuildContext context) {
+    return BottomNavigationBar(
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favorites'),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+      ],
+      selectedItemColor: Colors.orangeAccent,
+      unselectedItemColor: Colors.grey,
+      backgroundColor: Colors.white,
+      currentIndex: 0,
+      onTap: (index) {
+        // Handle navigation
+      },
+    );
+  }
+}
+
+// หน้าแสดงรายละเอียดสินค้า
+class ProductDetailScreen extends StatelessWidget {
+  final String title;
+  final String imageUrl;
+  final String price;
+
+  const ProductDetailScreen({required this.title, required this.imageUrl, required this.price});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        backgroundColor: Colors.orangeAccent,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.network(imageUrl, height: 200),
+            const SizedBox(height: 20),
+            Text(
+              price,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('$title added to cart!')),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orangeAccent,
+                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 80.0),
+              ),
+              child: const Text(
+                'Add to Cart',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// หน้าแสดงหมวดหมู่
+class CategoryScreen extends StatelessWidget {
+  final String category;
+
+  const CategoryScreen({required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('$category Category'),
+        backgroundColor: Colors.orangeAccent,
+      ),
+      body: Center(
+        child: Text(
+          'Products in $category',
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+}
+
+// หน้าตระกร้าสินค้า
+class CartScreen extends StatelessWidget {
+  const CartScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Cart'),
+        backgroundColor: Colors.orangeAccent,
+      ),
+      body: const Center(
+        child: Text(
+          'Your cart is empty!',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+}

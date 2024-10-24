@@ -1,0 +1,178 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: const Icon(Icons.menu, color: Colors.black),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: Icon(Icons.shopping_cart, color: Colors.black),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: const [
+                  Icon(Icons.location_on, color: Colors.red),
+                  SizedBox(width: 10),
+                  Text('2609, Robert Browning St, MA', style: TextStyle(fontSize: 16)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search Dishes',
+                  prefixIcon: const Icon(Icons.search),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Banner Section
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.red[100],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          '40% Discount!',
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red),
+                        ),
+                        Text(
+                          'Valid for today only',
+                          style: TextStyle(fontSize: 16, color: Colors.black54),
+                        ),
+                      ],
+                    ),
+                    Image.network(
+                      'https://via.placeholder.com/100',
+                      fit: BoxFit.cover,
+                      height: 100,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Category Section
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Categories',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 100,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  _buildCategoryItem('Pizza', 'https://via.placeholder.com/100'),
+                  _buildCategoryItem('Burger', 'https://via.placeholder.com/100'),
+                  _buildCategoryItem('Sandwich', 'https://via.placeholder.com/100'),
+                  _buildCategoryItem('Cake', 'https://via.placeholder.com/100'),
+                  _buildCategoryItem('Biryani', 'https://via.placeholder.com/100'),
+                  _buildCategoryItem('Ice cream', 'https://via.placeholder.com/100'),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Restaurant Section
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'All Restaurants',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return _buildRestaurantItem();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryItem(String name, String imageUrl) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundImage: NetworkImage(imageUrl),
+          ),
+          const SizedBox(height: 5),
+          Text(name),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRestaurantItem() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: ListTile(
+          contentPadding: const EdgeInsets.all(16.0),
+          leading: Image.network('https://via.placeholder.com/100'),
+          title: const Text('Restaurant Name'),
+          subtitle: const Text('Short Description of Restaurant'),
+          trailing: const Icon(Icons.arrow_forward_ios),
+        ),
+      ),
+    );
+  }
+}

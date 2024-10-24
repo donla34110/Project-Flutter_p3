@@ -1,0 +1,181 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const StorePage(),
+    );
+  }
+}
+
+class StorePage extends StatelessWidget {
+  const StorePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {},
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite, color: Colors.red),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              'https://via.placeholder.com/500x250',
+              fit: BoxFit.cover,
+              height: 200,
+              width: double.infinity,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Dominos',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: const [
+                      Icon(Icons.access_time, color: Colors.orange),
+                      SizedBox(width: 5),
+                      Text('Open: 9:30 AM - 11:00 PM'),
+                      SizedBox(width: 15),
+                      Icon(Icons.star, color: Colors.orange),
+                      Text('4.8 (250 reviews)'),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: const [
+                      Icon(Icons.location_on, color: Colors.orange),
+                      SizedBox(width: 5),
+                      Text('Location'),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.orange[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Text(
+                      'Enjoy 30% OFF on all categories!',
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const TabBarMenu(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class TabBarMenu extends StatefulWidget {
+  const TabBarMenu({super.key});
+
+  @override
+  _TabBarMenuState createState() => _TabBarMenuState();
+}
+
+class _TabBarMenuState extends State<TabBarMenu> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  final List<Map<String, dynamic>> items = [
+    {'name': 'Burger', 'price': '\$5.55', 'image': 'https://via.placeholder.com/100'},
+    {'name': 'Pizza', 'price': '\$7.55', 'image': 'https://via.placeholder.com/100'},
+    {'name': 'Chicken', 'price': '\$6.55', 'image': 'https://via.placeholder.com/100'},
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TabBar(
+          controller: _tabController,
+          indicatorColor: Colors.orange,
+          labelColor: Colors.orange,
+          unselectedLabelColor: Colors.grey,
+          tabs: const [
+            Tab(text: 'Offer'),
+            Tab(text: 'Burgers'),
+            Tab(text: 'Pizza'),
+            Tab(text: 'Chicken'),
+          ],
+        ),
+        SizedBox(
+          height: 300,
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              _buildMenuList(),
+              _buildMenuList(),
+              _buildMenuList(),
+              _buildMenuList(),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMenuList() {
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Card(
+            child: ListTile(
+              leading: Image.network(item['image']),
+              title: Text(item['name']),
+              subtitle: Text(item['price']),
+              trailing: IconButton(
+                icon: const Icon(Icons.add_circle_outline),
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${item['name']} added to cart!')),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}

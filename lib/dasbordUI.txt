@@ -1,0 +1,199 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const DashboardScreen(),
+    );
+  }
+}
+
+class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dashboard'),
+        backgroundColor: Colors.green,
+      ),
+      drawer: _buildDrawer(context), // Drawer with navigation
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Overview',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildStatCard('Sales', '\$12,500', Colors.orange,
+                    'https://image.makewebcdn.com/makeweb/m_1920x0/EnWusCjgL/Product_Vans/VANS_Old_Skool_Black_White_[VN000D3HY28__01.jpg'),
+                _buildStatCard('Customers', '300', Colors.blue,
+                    'https://image.makewebcdn.com/makeweb/m_1920x0/EnWusCjgL/Product_Vans/VANS_Old_Skool_Black_White_[VN000D3HY28__01.jpg'),
+              ],
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Recent Orders',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            ListTile(
+              leading: const CircleAvatar(
+                backgroundColor: Colors.green,
+                child: Icon(Icons.check, color: Colors.white),
+              ),
+              title: const Text('Order #12345'),
+              subtitle: const Text('Completed'),
+              trailing: const Text('\$120'),
+            ),
+            ListTile(
+              leading: const CircleAvatar(
+                backgroundColor: Colors.green,
+                child: Icon(Icons.check, color: Colors.white),
+              ),
+              title: const Text('Order #12346'),
+              subtitle: const Text('Completed'),
+              trailing: const Text('\$85'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const CreateNewOrderPage()),
+                );
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Create New Order'),
+              style: ElevatedButton.styleFrom(
+               
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                textStyle: const TextStyle(
+                    fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStatCard(
+      String title, String value, Color color, String imageUrl) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Image.network(
+              imageUrl,
+              width: 100, // ขนาดของรูปภาพ
+              height: 100, // ขนาดของรูปภาพ
+              fit: BoxFit.cover, // ทำให้รูปภาพเต็มพื้นที่ตามขนาดที่กำหนด
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 18, color: Colors.grey),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              value,
+              style: TextStyle(fontSize: 24, color: color),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.green,
+            ),
+            child: Text(
+              'Menu',
+              style: TextStyle(color: Colors.white, fontSize: 24),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.dashboard),
+            title: const Text('Dashboard'),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Orders'),
+            onTap: () {
+              // Navigate to Orders Page
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.people),
+            title: const Text('Customers'),
+            onTap: () {
+              // Navigate to Customers Page
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {
+              // Navigate to Settings Page
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            onTap: () {
+              // Add logout action
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CreateNewOrderPage extends StatelessWidget {
+  const CreateNewOrderPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Create New Order'),
+        backgroundColor: Colors.green,
+      ),
+      body: const Center(
+        child: Text(
+          'Order Creation Form',
+          style: TextStyle(fontSize: 24),
+        ),
+      ),
+    );
+  }
+}

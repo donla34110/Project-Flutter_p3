@@ -1,0 +1,187 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Get your groceries delivered quickly'),
+        backgroundColor: Colors.redAccent,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CartScreen(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Bundle Offers',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 150,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    _buildProductCard(context, 'Cooking Essentials', '\$60', 'https://via.placeholder.com/150'),
+                    _buildProductCard(context, 'Fruits & vegetable mix', '\$1260', 'https://via.placeholder.com/150'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'Popular',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              _buildPopularProduct(context, 'Nestle Koko Krunch Duo', '\$550', '550 gm', 'https://via.placeholder.com/150'),
+              _buildPopularProduct(context, 'Rupchanda Soyabean Oil', '\$480', '5 litres', 'https://via.placeholder.com/150'),
+              _buildPopularProduct(context, 'Fresh Refined Oil', '\$230', '2 litres', 'https://via.placeholder.com/150'),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'History',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ฟังก์ชันสร้างการ์ดสินค้า
+  Widget _buildProductCard(BuildContext context, String title, String price, String imageUrl) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(productName: title),
+          ),
+        );
+      },
+      child: Card(
+        elevation: 4,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(imageUrl, height: 100, width: 150, fit: BoxFit.cover),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(price, style: const TextStyle(fontSize: 14, color: Colors.green)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ฟังก์ชันสร้างรายการสินค้ายอดนิยม
+  Widget _buildPopularProduct(BuildContext context, String title, String price, String size, String imageUrl) {
+    return ListTile(
+      leading: Image.network(imageUrl, width: 60, height: 60),
+      title: Text(title),
+      subtitle: Text(size),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(price, style: const TextStyle(fontWeight: FontWeight.bold)),
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('$title added to cart!')),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// หน้ารายละเอียดสินค้า
+class ProductDetailScreen extends StatelessWidget {
+  final String productName;
+
+  const ProductDetailScreen({super.key, required this.productName});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(productName),
+        backgroundColor: Colors.redAccent,
+      ),
+      body: const Center(
+        child: Text('Details of the product will be shown here.'),
+      ),
+    );
+  }
+}
+
+// หน้าตระกร้าสินค้า
+class CartScreen extends StatelessWidget {
+  const CartScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Cart'),
+        backgroundColor: Colors.redAccent,
+      ),
+      body: const Center(
+        child: Text('Your cart is empty!'),
+      ),
+    );
+  }
+}

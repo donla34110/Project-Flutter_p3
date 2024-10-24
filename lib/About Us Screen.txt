@@ -1,0 +1,123 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const AboutUsScreen(),
+    );
+  }
+}
+
+class AboutUsScreen extends StatelessWidget {
+  const AboutUsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('About Us'),
+        backgroundColor: Colors.blueGrey,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'About Our Company',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'We are a company that focuses on delivering quality products to our customers. Our team is dedicated to innovation and customer satisfaction.',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Our Team',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView(
+                children: [
+                  buildTeamMemberCard(
+                      'John Doe', 'CEO', 'https://via.placeholder.com/100'),
+                  buildTeamMemberCard(
+                      'Jane Smith', 'CTO', 'https://via.placeholder.com/100'),
+                  buildTeamMemberCard('Mike Johnson', 'Designer',
+                      'https://image.makewebcdn.com/makeweb/m_1920x0/EnWusCjgL/Product_Vans/VANS_Old_Skool_Black_White_[VN000D3HY28__01.jpg'),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Follow Us',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.facebook, color: Colors.blue),
+                  onPressed: () {
+                    // Add Facebook link
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.email, color: Colors.red),
+                  onPressed: () {
+                    // Add Email link
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.link, color: Colors.blueAccent),
+                  onPressed: () {
+                    // Add LinkedIn link
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            const Center(
+              child: Text(
+                '© 2024 Our Company',
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildTeamMemberCard(String name, String position, String imageUrl) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 10),
+      elevation: 3,
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(imageUrl),
+          radius: 30,
+        ),
+        title: Text(
+          name,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(position),
+      ),
+    );
+  }
+}

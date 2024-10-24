@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const MovieDashboard(),
+    );
+  }
+}
+
+class MovieDashboard extends StatelessWidget {
+  const MovieDashboard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Movie Streaming'),
+        backgroundColor: Colors.black,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Continue Watching', style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+            _buildHorizontalMovieList(),
+            const SizedBox(height: 30),
+            const Text('Top Picks', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            Expanded(child: _buildVerticalMovieList()),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHorizontalMovieList() {
+    return SizedBox(
+      height: 150,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          _buildMovieCard('Movie 1', 'https://via.placeholder.com/100'),
+          _buildMovieCard('Movie 2', 'https://via.placeholder.com/100'),
+          _buildMovieCard('Movie 3', 'https://via.placeholder.com/100'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVerticalMovieList() {
+    return ListView(
+      children: [
+        _buildMovieCard('Movie 4', 'https://via.placeholder.com/100'),
+        _buildMovieCard('Movie 5', 'https://via.placeholder.com/100'),
+        _buildMovieCard('Movie 6', 'https://via.placeholder.com/100'),
+      ],
+    );
+  }
+
+  Widget _buildMovieCard(String title, String imageUrl) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ListTile(
+        leading: Image.network(imageUrl, fit: BoxFit.cover),
+        title: Text(title),
+        trailing: const Icon(Icons.play_arrow),
+      ),
+    );
+  }
+}
